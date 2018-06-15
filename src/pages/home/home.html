@@ -39,9 +39,8 @@
     <ion-list>
         <ion-item-sliding *ngFor="let barcode of barcodes">
             <ion-item>
-                <ion-card text-center>
+                <ion-card text-center (click)="getBarcode(barcode)">
                     <span>{{ barcode.amount }}</span>
-
                     <ngx-barcode [bc-format]="barcode.format" [bc-value]="barcode.code" [bc-display-value]="true"></ngx-barcode>
                 </ion-card>
             </ion-item>

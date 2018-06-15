@@ -25,14 +25,17 @@ export class HomePage {
             }else{
                 this.barcodes.splice(0,0,new Barcode(this.newBarcode));
             }
-            let total = 0;
-            for(let barcode of this.barcodes){
-                total+=barcode.amount;
-            }
-            this.total = total;
+            this.calculateTotal();
         }
     }
 
+    calculateTotal(){
+        let total = 0;
+        for(let barcode of this.barcodes){
+            total+=barcode.amount;
+        }
+        this.total = total;
+    }
     scanCode() {
         this.barcodeScanner.scan().then(barcodeData => {
                 this.newBarcode = barcodeData.text;
@@ -59,6 +62,7 @@ export class HomePage {
         if(index >-1){
             this.barcodes.splice(index, 1);
         }
+        this.calculateTotal();
     }
 
     clearLast(){
@@ -78,10 +82,15 @@ export class HomePage {
                     text: 'Clear',
                     handler: () => {
                         this.barcodes = [];
+                        this.calculateTotal();
                     }
                 }
             ]
         }).present();
+    }
+
+    getBarcode(barcode){
+        this.newBarcode = barcode.code;
     }
 
     checkOut(){
