@@ -2,6 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import { Slides } from 'ionic-angular';
 import {Barcode} from "../../models/barcode";
+import { Dialogs } from '@ionic-native/dialogs';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class CheckoutPage {
     delay:number=3;
     @ViewChild(Slides) slides: Slides;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams) {
+    constructor(public navCtrl: NavController, public navParams: NavParams,private dialogs: Dialogs) {
     }
 
     ionViewWillEnter() {
@@ -66,6 +67,7 @@ export class CheckoutPage {
 
     showNext(){
         if(!this.barcodes[this.current+1]){
+            this.dialogs.beep(1);
             this.stopCheckout();
         }
         if(!this.barcodes[this.current+1] || !this.running) return;

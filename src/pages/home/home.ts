@@ -37,7 +37,7 @@ export class HomePage {
         this.total = total;
     }
     scanCode() {
-        this.barcodeScanner.scan().then(barcodeData => {
+        this.barcodeScanner.scan({formats:"EAN8,EAN13",resultDisplayDuration:0}).then(barcodeData => {
                 this.newBarcode = barcodeData.text;
                 this.createCode();
         }, (err) => {
