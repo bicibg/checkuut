@@ -6,25 +6,34 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { NgxBarcodeModule } from 'ngx-barcode';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import {CheckoutPage} from "../pages/checkout/checkout";
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+      CheckoutPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+      NgxBarcodeModule
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+      CheckoutPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+      BarcodeScanner
+
   ]
 })
 export class AppModule {}

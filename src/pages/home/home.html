@@ -1,14 +1,74 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title text-center>
+            Checkuut
+        </ion-title>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-grid no-padding>
+            <ion-row>
+                <ion-col col-12>
+                    <ion-item>
+                        <ion-input type="text" placeholder="Barcode" [(ngModel)]="newBarcode" clearInput>
+                        </ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-10>
+                    <button ion-button full icon-left (click)="createCode()">
+                        <ion-icon name="barcode"></ion-icon>
+                        Create Code
+                    </button>
+                </ion-col>
+                <ion-col col-2>
+                    <button ion-button full icon-left color="dark" [disabled]="!newBarcode" (click)="clearLast()"
+                            icon-only>
+                        <ion-icon name="close"></ion-icon>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content no-padding>
+    <ion-list>
+        <ion-item-sliding *ngFor="let barcode of barcodes">
+            <ion-item>
+                <ion-card text-center>
+                    <span>{{ barcode.amount }}</span>
+                    <ngx-barcode [bc-value]="barcode.code" [bc-display-value]="true"></ngx-barcode>
+                </ion-card>
+            </ion-item>
+            <ion-item-options>
+                <button ion-button color="danger" (click)="removeCode(barcode)" icon-only>
+                    <ion-icon name="trash"></ion-icon>
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
 </ion-content>
+<ion-footer text-center>
+    <p *ngIf="total">Items scanned:{{total}}</p>
+    <ion-grid no-padding>
+        <ion-row>
+            <ion-col col-2>
+                <button [disabled]="barcodes.length<1" ion-button full large icon-only (click)="clearAll()" color="danger">
+                    <ion-icon name="refresh"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-4>
+                <button [disabled]="barcodes.length<1" ion-button full large icon-only (click)="checkOut()" color="secondary">
+                    <ion-icon name="card"></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-6>
+                <button ion-button full large icon-left (click)="scanCode()">
+                    <ion-icon name="qr-scanner"></ion-icon>
+                    Scan Code
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>

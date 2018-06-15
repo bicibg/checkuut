@@ -1,0 +1,13 @@
+page-checkout {
+  .black{
+    background-color: black;
+  }
+
+  ion-badge{
+    position: fixed;
+    z-index: 100;
+    right: 10px;
+    top: 70px;
+    font-size: 1.2em;
+  }
+}
