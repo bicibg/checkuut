@@ -1,9 +1,21 @@
 export class Barcode {
     amount:number=1;
     code:string;
-    displayed:boolean=false;
-
+    format:string;
     constructor(code){
-        this.code = code;
+        if(code && code.length){
+            this.code = code;
+            switch(this.code.length){
+                case 13:
+                    this.format = 'EAN13';
+                    break;
+                case 8:
+                    this.format = 'EAN8';
+                    break;
+                default:
+                    this.code = '';
+                    this.format = 'EAN13';
+            }
+        }
     }
 }

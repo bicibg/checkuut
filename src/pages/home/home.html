@@ -41,7 +41,8 @@
             <ion-item>
                 <ion-card text-center>
                     <span>{{ barcode.amount }}</span>
-                    <ngx-barcode [bc-format]="'EAN13'" [bc-value]="barcode.code" [bc-display-value]="true"></ngx-barcode>
+
+                    <ngx-barcode [bc-format]="barcode.format" [bc-value]="barcode.code" [bc-display-value]="true"></ngx-barcode>
                 </ion-card>
             </ion-item>
             <ion-item-options>

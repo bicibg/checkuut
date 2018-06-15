@@ -55,15 +55,10 @@ export class HomePage {
 
 
     removeCode(removeThis){
-
-            let index = this.barcodes.findIndex(barcode => barcode.code == removeThis.code);
-
-            console.log(index);
-
-            if(index >-1){
-                this.barcodes.splice(index, 1);
-            }
-
+        let index = this.barcodes.findIndex(barcode => barcode.code == removeThis.code);
+        if(index >-1){
+            this.barcodes.splice(index, 1);
+        }
     }
 
     clearLast(){

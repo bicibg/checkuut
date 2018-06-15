@@ -23,7 +23,6 @@ export class CheckoutPage {
 
     ionViewWillEnter() {
         this.gaps = !!this.navParams.get('gaps');
-        console.log(this.gaps);
         if(this.navParams.get('delay')){
             this.delay = this.navParams.get('delay');
         }

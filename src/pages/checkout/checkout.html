@@ -11,9 +11,9 @@
         {{seconds}}
     </ion-badge>
     <ion-slides (ionSlideDidChange)="slideChanged()">
-        <ion-slide *ngFor="let barcode of barcodes" [ngClass]="{black:barcode.code.length==0}">
+        <ion-slide *ngFor="let barcode of barcodes" [ngClass]="{black:!barcode.code || barcode.code.length==0}">
             <ion-card text-center *ngIf="barcode.code">
-                <ngx-barcode [bc-format]="'EAN13'" [bc-value]="barcode.code" [bc-display-value]="true"></ngx-barcode>
+                <ngx-barcode [bc-format]="barcode.format" [bc-value]="barcode.code" [bc-display-value]="true"></ngx-barcode>
             </ion-card>
         </ion-slide>
     </ion-slides>
