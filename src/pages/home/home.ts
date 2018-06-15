@@ -12,18 +12,15 @@ export class HomePage {
     newBarcode = null;
     barcodes: any[] = [];
     total:number=0;
+    gaps:boolean=true;
+    delay:number=3;
     constructor(private navCtrl:NavController,private barcodeScanner: BarcodeScanner,private alertCtrl:AlertController) {
     }
 
     createCode() {
         if (this.newBarcode) {
-            if (this.barcodes.filter(barcode => {
-                return barcode.code == this.newBarcode;
-            }).length > 0) {
-                let existing = this.barcodes.filter(barcode => {
-                    return barcode.code == this.newBarcode;
-                })[0];
-                let index = this.barcodes.indexOf(existing);
+            let index = this.barcodes.findIndex(barcode => barcode.code == this.newBarcode);
+            if(index>-1){
                 this.barcodes[index].amount++;
             }else{
                 this.barcodes.splice(0,0,new Barcode(this.newBarcode));
@@ -46,35 +43,27 @@ export class HomePage {
     }
 
     decreaseAmount(decreaseThis){
-        if (this.barcodes.filter(barcode => {
-            return barcode.code == decreaseThis.code;
-        }).length > 0) {
-            let existing = this.barcodes.filter(barcode => {
-                return barcode.code == this.newBarcode;
-            })[0];
-            let index = this.barcodes.indexOf(existing);
-            if(index){
-                if(existing.amount>1) {
-                    this.barcodes[index].amount--;
-                }else{
-                    this.barcodes.splice(index, 1);
-                }
+        let index = this.barcodes.findIndex(barcode => barcode.code == decreaseThis.code);
+        if(index>-1){
+            if(decreaseThis.amount>1) {
+                this.barcodes[index].amount--;
+            }else{
+                this.barcodes.splice(index, 1);
             }
         }
     }
 
+
     removeCode(removeThis){
-        if (this.barcodes.filter(barcode => {
-            return barcode.code == removeThis.code;
-        }).length > 0) {
-            let existing = this.barcodes.filter(barcode => {
-                return barcode.code == this.newBarcode;
-            })[0];
-            let index = this.barcodes.indexOf(existing);
-            if(index){
+
+            let index = this.barcodes.findIndex(barcode => barcode.code == removeThis.code);
+
+            console.log(index);
+
+            if(index >-1){
                 this.barcodes.splice(index, 1);
             }
-        }
+
     }
 
     clearLast(){
@@ -120,7 +109,7 @@ export class HomePage {
     }
 
     reallyCheckout(){
-        this.navCtrl.push(CheckoutPage,{barcodes:this.barcodes})
+        this.navCtrl.push(CheckoutPage,{barcodes:this.barcodes,delay:this.delay,gaps:this.gaps})
     }
 
 }

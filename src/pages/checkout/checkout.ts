@@ -14,13 +14,19 @@ export class CheckoutPage {
     current:number=0;
     seconds:number;
     running:boolean=false;
+    gaps:boolean=true;
+    delay:number=3;
     @ViewChild(Slides) slides: Slides;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
     }
 
     ionViewWillEnter() {
-
+        this.gaps = !!this.navParams.get('gaps');
+        console.log(this.gaps);
+        if(this.navParams.get('delay')){
+            this.delay = this.navParams.get('delay');
+        }
         if(this.navParams.get('barcodes')){
             let barcodes = [...this.navParams.get('barcodes')];
             let copy = [];
@@ -29,10 +35,12 @@ export class CheckoutPage {
                     copy.push(barcode);
                 }
             }
-            let l = 0;
-            while (l <= copy.length) {
-                copy.splice(l, 0, new Barcode(''));
-                l += 2;
+            if(this.gaps){
+                let l = 0;
+                while (l <= copy.length) {
+                    copy.splice(l, 0, new Barcode(''));
+                    l += 2;
+                }
             }
             this.barcodes = copy;
         }
@@ -43,7 +51,7 @@ export class CheckoutPage {
         this.seconds = 3;
         let counter = setInterval(()=>{
             this.seconds = this.seconds-1;
-            if(this.seconds<1){
+            if(this.seconds<=0){
                 clearInterval(counter);
                 this.seconds = undefined;
             }
@@ -62,10 +70,11 @@ export class CheckoutPage {
             this.stopCheckout();
         }
         if(!this.barcodes[this.current+1] || !this.running) return;
-        this.seconds = 2;
+        this.seconds = this.delay;
         let counter = setInterval(()=>{
             this.seconds = this.seconds-1;
-            if(this.seconds<1){
+            if(this.seconds<=0){
+                clearInterval(counter);
                 clearInterval(counter);
                 this.seconds = undefined;
             }
@@ -73,7 +82,7 @@ export class CheckoutPage {
         setTimeout(()=>{
             this.slides.slideTo(this.current+1, 500);
             this.showNext();
-        },2000)
+        },this.delay*1000)
     }
 
     slideChanged() {
