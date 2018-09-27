@@ -474,7 +474,7 @@ public class QRScanner extends CordovaPlugin implements BarcodeCallback {
                 mBarcodeView.setCameraSettings(settings);
 
                 DisplayMetrics displaymetrics = new DisplayMetrics();
-                int dp =dpFromPx(500);
+                int dp =Math.round(dpFromPx(500));
 
                 FrameLayout.LayoutParams cameraPreviewParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, dp);
                 cameraPreviewParams.setMargins(0,0,0,0);
