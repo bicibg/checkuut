@@ -448,6 +448,11 @@ public class QRScanner extends CordovaPlugin implements BarcodeCallback {
             return false;
         }
     }
+
+    public static float dpFromPx(final Context context, final float px) {
+        return px / context.getResources().getDisplayMetrics().density;
+    }
+
     private void setupCamera(CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -469,7 +474,7 @@ public class QRScanner extends CordovaPlugin implements BarcodeCallback {
                 mBarcodeView.setCameraSettings(settings);
 
                 DisplayMetrics displaymetrics = new DisplayMetrics();
-                int dp = ((float) 500 / cordova.getActivity().getApplicationContext().getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+                int dp =dpFromPx(500);
 
                 FrameLayout.LayoutParams cameraPreviewParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, dp);
                 cameraPreviewParams.setMargins(0,0,0,0);
