@@ -449,8 +449,8 @@ public class QRScanner extends CordovaPlugin implements BarcodeCallback {
         }
     }
 
-    public static float dpFromPx(final Context context, final float px) {
-        return px / context.getResources().getDisplayMetrics().density;
+    public static float dpFromPx(final float px) {
+        return px / cordova.getActivity().getApplicationContext().getResources().getDisplayMetrics().density;
     }
 
     private void setupCamera(CallbackContext callbackContext) {
