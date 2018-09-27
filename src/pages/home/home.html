@@ -1,82 +1,39 @@
-<ion-header>
-    <ion-navbar>
-        <ion-title text-center>
-            checkuut
-        </ion-title>
-    </ion-navbar>
-    <ion-toolbar>
-        <ion-grid no-padding>
-            <ion-row>
-                <ion-col col-4>
-                    <p no-margin text-center><b>Items scanned</b><br/>{{total}}</p>
-                </ion-col>
-                <ion-col col-8>
-                    <ion-item>
-                        <ion-input type="number" text-center placeholder="Barcode" [(ngModel)]="newBarcode" clearInput>
-                        </ion-input>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col col-10>
-                    <button ion-button full icon-left (click)="createCode()">
-                        <ion-icon name="barcode"></ion-icon>
-                        Create Code
-                    </button>
-                </ion-col>
-                <ion-col col-2>
-                    <button ion-button full icon-left color="dark" [disabled]="!newBarcode" (click)="clearLast()"
-                            icon-only>
-                        <ion-icon name="close"></ion-icon>
-                    </button>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </ion-toolbar>
-</ion-header>
+<ion-content style="background: none transparent;" no-padding no-margin>
+    <ion-grid style="height: 100%; width:100%;" no-padding no-margin>
+        <ion-row nowrap *ngIf="scannerActive" style="height: 500px">
+            <ion-col no-padding no-margin>
+                <div id="preview"></div>
+            </ion-col>
+        </ion-row>
+        <ion-row nowrap style="height: 100%; background-color:white;">
+            <ion-col style="height: 100%; width:100%; background-color:white;">
+                <ion-list>
+                    <ion-item-sliding *ngFor="let barcode of barcodes">
+                        <ion-item>
+                            <ion-card text-center (click)="getBarcode(barcode)">
+                                <span>{{ barcode.amount }}</span>
+                                <ngx-barcode [bc-format]="barcode.format" [bc-value]="barcode.code" [bc-display-value]="true"></ngx-barcode>
+                            </ion-card>
+                        </ion-item>
+                        <ion-item-options>
+                            <button ion-button color="danger" (click)="removeCode(barcode)" icon-only>
+                                <ion-icon name="trash"></ion-icon>
+                            </button>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </ion-list>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
-<ion-content no-padding>
-    <ion-list>
-        <ion-item-sliding *ngFor="let barcode of barcodes">
-            <ion-item>
-                <ion-card text-center (click)="getBarcode(barcode)">
-                    <span>{{ barcode.amount }}</span>
-                    <ngx-barcode [bc-format]="barcode.format" [bc-value]="barcode.code" [bc-display-value]="true"></ngx-barcode>
-                </ion-card>
-            </ion-item>
-            <ion-item-options>
-                <button ion-button color="danger" (click)="removeCode(barcode)" icon-only>
-                    <ion-icon name="trash"></ion-icon>
-                </button>
-            </ion-item-options>
-        </ion-item-sliding>
-    </ion-list>
 </ion-content>
-<ion-footer text-center>
+<ion-footer text-center style="background-color: lightgray;">
     <ion-grid no-padding>
         <ion-row>
             <ion-col col-6>
-                <ion-item>
-                    <ion-label>Gaps</ion-label>
-                    <ion-checkbox [(ngModel)]="gaps"></ion-checkbox>
-                </ion-item>
-            </ion-col>
-            <ion-col col-6>
-                <ion-item>
-                    <ion-input text-center type="number" [(ngModel)]="delay"></ion-input>
-                    <ion-label>Delay (s)</ion-label>
-                </ion-item>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col col-2>
                 <button [disabled]="barcodes.length<1" ion-button full large icon-only (click)="clearAll()" color="danger">
                     <ion-icon name="refresh"></ion-icon>
-                </button>
-            </ion-col>
-            <ion-col col-4>
-                <button [disabled]="barcodes.length<1" ion-button full large icon-only (click)="checkOut()" color="secondary">
-                    <ion-icon name="card"></ion-icon>
+                    Clear
                 </button>
             </ion-col>
             <ion-col col-6>

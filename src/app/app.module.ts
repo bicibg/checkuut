@@ -8,14 +8,13 @@ import {Dialogs} from '@ionic-native/dialogs';
 import {MyApp} from './app.component';
 import {HomePage} from '../pages/home/home';
 import {NgxBarcodeModule} from 'ngx-barcode';
-import {BarcodeScanner} from '@ionic-native/barcode-scanner';
-import {CheckoutPage} from "../pages/checkout/checkout";
+import {QRScanner} from "@ionic-native/qr-scanner";
+import {AndroidPermissions} from "@ionic-native/android-permissions";
 
 @NgModule({
     declarations: [
         MyApp,
         HomePage,
-        CheckoutPage
     ],
     imports: [
         BrowserModule,
@@ -27,14 +26,14 @@ import {CheckoutPage} from "../pages/checkout/checkout";
     entryComponents: [
         MyApp,
         HomePage,
-        CheckoutPage
     ],
     providers: [
         StatusBar,
         SplashScreen,
         {provide: ErrorHandler, useClass: IonicErrorHandler},
-        BarcodeScanner,
-        Dialogs
+        Dialogs,
+        QRScanner,
+        AndroidPermissions
     ]
 })
 export class AppModule {
