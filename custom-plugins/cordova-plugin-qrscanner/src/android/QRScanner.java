@@ -9,6 +9,7 @@ import android.hardware.camera2.CameraAccessException;
 import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.content.res.Resources;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
@@ -449,8 +450,10 @@ public class QRScanner extends CordovaPlugin implements BarcodeCallback {
         }
     }
 
-    public static float dpFromPx(final float px) {
-        return px / cordova.getActivity().getApplicationContext().getResources().getDisplayMetrics().density;
+    public static float convertPixelsToDp(float px){
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float dp = px / metrics.densityDpi;
+        return Math.round(dp);
     }
 
     private void setupCamera(CallbackContext callbackContext) {
@@ -473,10 +476,7 @@ public class QRScanner extends CordovaPlugin implements BarcodeCallback {
                 settings.setRequestedCameraId(getCurrentCameraId());
                 mBarcodeView.setCameraSettings(settings);
 
-                DisplayMetrics displaymetrics = new DisplayMetrics();
-                int dp =Math.round(dpFromPx(500));
-
-                FrameLayout.LayoutParams cameraPreviewParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, dp);
+                FrameLayout.LayoutParams cameraPreviewParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, (int) Math.round(convertPixelsToDp(500)));
                 cameraPreviewParams.setMargins(0,0,0,0);
                 ((ViewGroup) webView.getView().getParent()).addView(mBarcodeView, cameraPreviewParams);
 
