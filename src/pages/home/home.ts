@@ -1,8 +1,12 @@
 import {Component} from '@angular/core';
-import {BarcodeScanner} from '@ionic-native/barcode-scanner';
+//import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {Barcode} from "../../models/barcode";
 import {AlertController, NavController} from "ionic-angular";
 import {CheckoutPage} from "../checkout/checkout";
+import {ScanPage} from "../scan/scan";
+import {AndroidPermissions} from "@ionic-native/android-permissions";
+import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'page-home',
@@ -12,7 +16,21 @@ export class HomePage {
     newBarcode = null;
     barcodes: any[] = [];
     total:number=0;
-    constructor(private navCtrl:NavController,private barcodeScanner: BarcodeScanner,private alertCtrl:AlertController) {
+    scannerActive=false;
+    scanSub:Subscription;
+    constructor(private navCtrl:NavController,
+                /*private barcodeScanner: BarcodeScanner,*/
+                private alertCtrl:AlertController,
+                public androidPermissions: AndroidPermissions,
+                public qrScanner: QRScanner
+    ) {
+        QRScanner.prepare((err, status)=>
+        {
+            if (status.authorized) {
+
+                QRScanner.scan(function(err, text) ); QRScanner.show(); } });
+
+
     }
 
     createCode() {
@@ -35,14 +53,44 @@ export class HomePage {
             this.total = total;
         }
     }
+    gotoScanPage(){
+        this.navCtrl.push(ScanPage);
+    }
+
 
     scanCode() {
+        this.qrScanner.getStatus().then(status=>{
+            if(status.scanning){
+                console.log("stop scanning");
+                this.scannerActive = false;
+                this.qrScanner.destroy().then(()=>{
+                    this.scanSub.unsubscribe();
+                });
+            }else{
+                console.log("start scanning");
+
+                this.qrScanner.prepare().then(()=>{
+                    document.getElementById("viewport").setAttribute("content", "width=" + (window.screen.width * window.devicePixelRatio) + ", minimal-ui, user-scalable=0");
+                    this.scanSub = this.qrScanner.scan().subscribe((text: string) => {
+                        document.getElementById("viewport").setAttribute("content", "width=375, minimal-ui, user-scalable=0");
+                        console.log('Scanned something', text);
+                        this.newBarcode = text;
+                        this.createCode();
+                    });
+                    this.qrScanner.show().then(()=>{
+                        this.scannerActive = true;
+                    });
+                });
+            }
+        });
+        /*
         this.barcodeScanner.scan().then(barcodeData => {
                 this.newBarcode = barcodeData.text;
                 this.createCode();
         }, (err) => {
             console.log('Error: ', err);
         });
+        */
     }
 
     decreaseAmount(decreaseThis){
